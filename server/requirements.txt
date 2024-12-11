@@ -1,0 +1,5 @@
+pandas
+matplotlib
+fastapi
+pydantic
+uvicorn

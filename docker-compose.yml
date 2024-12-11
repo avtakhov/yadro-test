@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  parse:
+    depends_on:
+      server:
+        condition: service_healthy
+    build:
+      context: parse
+    container_name: yadro-parse
+    environment:
+      - PARSE_API_HOST=server
+      - PARSE_API_PORT=8080
+    volumes:
+      - ./example:/tmp/example
+
+  server:
+    build:
+      context: server
+    container_name: yadro-server
+    volumes:
+      - type: bind
+        source: ./server
+        target: /app
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 7s
+      timeout: 1s
+      retries: 1
